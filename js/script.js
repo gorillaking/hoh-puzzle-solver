@@ -1,36 +1,48 @@
-var moveData;
+let moveData;
+let defaultGraph;
 
 async function load()
 {
-  
+  let config = {
+    startOnLoad: true,
+    flowchart: { useMaxWidth: false },
+    maxTextSize: 90000
+  }
+
+  mermaid.initialize(config);
 
   fetch('./js/metadata.json')
     .then(response => response.json())
-    .then(data => { moveData = data });
-    // .then(_ => generateMermaidGraph());
-
-    await generateMermaidGraph()
+    .then(data => { moveData = data })
+    .then(_ => createDefaultMermaidGraph())
+    .then(_ => generateMermaidGraph(defaultGraph));
 }
 
-async function generateMermaidGraph()
+async function generateMermaidGraph(graph)
 {
-  var list = ["test1", "test2", "test3"]
-  var random = Math.floor(Math.random() * 3); 
-
-  var graph = "graph TD\n";
-  graph += " " + list[random] + "-->C[fa:fa-ban forbidden]";
-
   var graphElement = document.getElementById("graph");
   graphElement.removeAttribute("data-processed");
   document.getElementById("graph").innerHTML = graph;
 
-  mermaid.initialize();
   await mermaid.run({
-    querySelector: '.test'
+    querySelector: '.paths'
   });
+}
 
-  // 0000111-->C[fa:fa-ban forbidden]
-  // A[<img src='./images/000000010.png'>] --- B
-  // B-->D[<img src='./images/000000010.png'>];
-  // B-->E
+function createDefaultMermaidGraph()
+{
+  defaultGraph = "graph TD\n";
+  let keys = Object.keys(moveData);
+
+  defaultGraph += `111111111[<div><p>111111111</p><img src="../images/111111111.png"></div>]\n`
+
+  for(let i = 0; i < keys.length; i++)
+  {
+    let source = keys[i];
+    let target = moveData[source];
+    defaultGraph += `${source}[<div><p>${source}</p><img src="../images/${source}.png"></div>]\n`
+    defaultGraph += `  ${source}-->${target}\n`
+  }
+
+  console.log(defaultGraph);
 }
