@@ -34,15 +34,13 @@ function createDefaultMermaidGraph()
   defaultGraph = "graph TD\n";
   let keys = Object.keys(moveData);
 
-  defaultGraph += `111111111[<div><p>111111111</p><img src="../images/111111111.png"></div>]\n`
+  defaultGraph += `111111111[<div><p>111111111</p><img src="./images/111111111.png"></div>]\n`
 
   for(let i = 0; i < keys.length; i++)
   {
     let source = keys[i];
     let target = moveData[source];
-    defaultGraph += `${source}[<div><p>${source}</p><img src="../images/${source}.png"></div>]\n`
+    defaultGraph += `${source}[<div><p>${source}</p><img src="./images/${source}.png"></div>]\n`
     defaultGraph += `  ${source}-->${target}\n`
   }
-
-  console.log(defaultGraph);
 }
